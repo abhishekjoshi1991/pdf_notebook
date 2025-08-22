@@ -10,7 +10,7 @@ class Settings:
     
     # App Settings
     APP_NAME = "NotebookLM Backend"
-    DEBUG = True
+    debug = True
     
     # File Settings
     UPLOAD_DIR = "static/uploads"
