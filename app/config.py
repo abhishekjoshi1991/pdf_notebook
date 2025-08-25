@@ -7,6 +7,7 @@ class Settings:
     # API Keys
     LLAMA_CLOUD_API_KEY = os.getenv("LLAMA_CLOUD_API_KEY")
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+    GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
     
     # App Settings
     APP_NAME = "NotebookLM Backend"
@@ -20,6 +21,9 @@ class Settings:
     CHUNK_SIZE = 1000
     CHUNK_OVERLAP = 200
     MAX_CHUNKS_PER_QUERY = 5
+
+    # LLM Provider
+    LLM_PROVIDER="openai" # choices are "gemini" and "openai"
 
 settings = Settings()
 

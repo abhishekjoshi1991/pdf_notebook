@@ -6,29 +6,39 @@ from langchain_core.prompts import PromptTemplate
 from models.schemas import ChatResponse, Citation
 from services.vector_service import VectorService
 from config import settings
+from langchain_google_genai import ChatGoogleGenerativeAI
 from app_logging.logger import Logger
 logger = Logger().get_logger(__name__)
 
 class ChatService:
     def __init__(self, vector_service: VectorService):
-        self.llm = ChatOpenAI(
-            api_key=settings.OPENAI_API_KEY,
-            model="gpt-4.1",
-            temperature=0,
-            max_tokens=500
-        )
+        if settings.LLM_PROVIDER == "openai":
+            print("using openai model")
+
+            self.llm = ChatOpenAI(
+                api_key=settings.OPENAI_API_KEY,
+                model="gpt-4.1",
+                temperature=0,
+                max_tokens=500
+            )
+        else:
+            self.llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", google_api_key=settings.GOOGLE_API_KEY, temperature=0)
+
         self.vector_service = vector_service
         self.qa_prompt = PromptTemplate(
-            template=
-                """Use the following pieces of context to answer the question. 
-                If you don't know the answer, just say that you don't know.
+            template = """
+            Use the following pieces of context to answer the question. 
+            - Keep the answer concise and directly relevant.
+            - Prefer pointwise/bullet format if multiple aspects exist.
+            - If you don't know the answer, just say "I don't know."
 
-                Context:
-                {context}
+            Context:
+            {context}
 
-                Question: {question}
+            Question: {question}
 
-                Answer: """,
+            Answer:
+            """,
             input_variables=["context", "question"]
         )
     

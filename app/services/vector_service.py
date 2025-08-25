@@ -6,14 +6,20 @@ from config import settings
 import tempfile
 import shutil
 import os
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from app_logging.logger import Logger
 logger = Logger().get_logger(__name__)
 
 class VectorService:
     def __init__(self):
-        self.embeddings = OpenAIEmbeddings(
-            api_key=settings.OPENAI_API_KEY
-        )
+        if settings.LLM_PROVIDER == "openai":
+            print("using openai embedding")
+            self.embeddings = OpenAIEmbeddings(
+                api_key=settings.OPENAI_API_KEY
+            )
+        else:
+            self.embeddings = GoogleGenerativeAIEmbeddings(model="gemini-embedding-001", google_api_key=settings.GOOGLE_API_KEY)
+
         self.current_vectorstore: Optional[Chroma] = None
         self.temp_dir = None
     
