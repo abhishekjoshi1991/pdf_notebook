@@ -13,8 +13,7 @@ logger = Logger().get_logger(__name__)
 class ChatService:
     def __init__(self, vector_service: VectorService):
         if settings.LLM_PROVIDER == "openai":
-            print("using openai model")
-
+            logger.info("using gemini model")
             self.llm = ChatOpenAI(
                 api_key=settings.OPENAI_API_KEY,
                 model="gpt-4.1",
@@ -22,6 +21,7 @@ class ChatService:
                 max_tokens=500
             )
         else:
+            logger.info("using gemini model")
             self.llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", google_api_key=settings.GOOGLE_API_KEY, temperature=0)
 
         self.vector_service = vector_service

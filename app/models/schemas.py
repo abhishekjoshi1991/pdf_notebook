@@ -17,8 +17,3 @@ class ChatResponse(BaseModel):
     answer: str
     citations: List[Citation]
     status: str = "success"
-
-# class ErrorResponse(BaseModel):
-#     error: str
-#     detail: Optional[str] = None
-#     status: str = "error"

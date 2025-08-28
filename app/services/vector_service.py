@@ -13,11 +13,12 @@ logger = Logger().get_logger(__name__)
 class VectorService:
     def __init__(self):
         if settings.LLM_PROVIDER == "openai":
-            print("using openai embedding")
+            logger.info("using openai embedding")
             self.embeddings = OpenAIEmbeddings(
                 api_key=settings.OPENAI_API_KEY
             )
         else:
+            logger.info("using gemini embedding")
             self.embeddings = GoogleGenerativeAIEmbeddings(model="gemini-embedding-001", google_api_key=settings.GOOGLE_API_KEY)
 
         self.current_vectorstore: Optional[Chroma] = None
