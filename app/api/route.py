@@ -22,7 +22,7 @@ async def upload_pdf(file: UploadFile = File(...)):
     """Upload and process PDF file"""
     if not file.filename.lower().endswith('.pdf'):
         raise HTTPException(status_code=400, detail="Only PDF files are allowed")
-    
+
     os.makedirs(settings.UPLOAD_DIR, exist_ok=True)
     
     file_id = str(uuid.uuid4())
@@ -58,6 +58,10 @@ async def upload_pdf(file: UploadFile = File(...)):
 @router.post("/chat", response_model=ChatResponse)
 def chat_with_document(request: ChatRequest):
     """Chat with the currently uploaded document"""
+    print(vector_service.has_documents())
+    if not vector_service.has_documents():
+        raise HTTPException(status_code=400, detail="Upload PDF first!")
+    
     if not request.query.strip():
         raise HTTPException(status_code=400, detail="Query cannot be empty")
     
